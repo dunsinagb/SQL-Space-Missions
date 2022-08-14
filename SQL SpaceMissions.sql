@@ -6,11 +6,6 @@
 
 --===Data Cleaning===--
 
-/* View data */
-
-SELECT TOP (1000) *
-  FROM [master].[dbo].[spacemissions]
-
 /* Separating location into individual columns for address, citystate and country; using parse */
 
 SELECT [Location]
@@ -24,7 +19,7 @@ PARSENAME(REPLACE(Location, ',', '.'), 3)
 , PARSENAME(REPLACE(Location, ',', '.'), 1) 
 FROM dbo.spacemissions
 
-/* create 3 new columns for the newly split owneraddress) */
+/* create 3 new columns for the newly split location) */
 
 ALTER TABLE dbo.spacemissions
 ADD LaunchAddress NVARCHAR(200);
@@ -44,24 +39,16 @@ ADD LaunchCountry  NVARCHAR(200);
 UPDATE dbo.spacemissions
 SET LaunchCountry = PARSENAME(REPLACE(location, ',', '.'), 1)
 
-/* preview update */
-
-SELECT * 
-from spacemissions
-
 /* setting null price to zero */
 
 update dbo.spacemissions
 set price = 0 
 where price is NULL
 
-select *
-from spacemissions
-
 
 --===Data exploration===--
 
-/*  Total Country */
+/*  Total country count */
 
 SELECT COUNT(DISTINCT LaunchCountry) FROM [dbo].[spacemissions] As Total_Country
 
